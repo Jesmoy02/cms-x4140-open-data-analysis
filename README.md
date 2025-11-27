@@ -18,3 +18,7 @@ CMSSW configuration used to run the `JPsiTrkTrkTrk` EDAnalyzer on the CMS Run 20
 - `cmssw_cfg/JPsiTrkTrkTrk_cfi.py`
 Default configuration of the `JPsiTrkTrkTrk` EDAnalyzer. It defines the input collections (muons, tracks, primary vertices and HLT results), the list of J/ψ trigger paths, and the complete set of preselection and final selection cuts used in the thesis analysis. The module implements the six-step selection strategy for the B⁺ → J/ψ φ K⁺ candidates (J/ψ dimuon mass window, kaon pT/η/hits, φ mass window, vertex probabilities and Lxy significance). This cfi is cloned and slightly customised in `cmssw_cfg_jpsitrktrktrk.py`.
 
+- `batch_scripts/04_merge_jpsitrktrktrk_outputs.sh`  
+Single-pass merger for all `*_jpsitrktrktrk.root` output files. It scans `output_files_jpsitrktrktrk/` for per-file JPsiTrkTrkTrk ROOT outputs (excluding any file that already contains `merged` in its name), writes a manifest with the full input list in `output_files_jpsitrktrktrk/merged/`, and runs a single `hadd -f` (ROOT 5.32, CMSSW_5_3_32 environment) to produce the final merged file `muonia_all_jpsitrktrktrk_merged.root`. A short preview of the inputs and a size check of the merged output are printed.
+
+
