@@ -8,3 +8,6 @@ Interactive script to download subsets of the CMS Run 2011A MuOnia AOD sample vi
 
 - `batch_scripts/02_run_jpsitrktrktrk_local_files.sh`  
 Batch runner for the `JPsiTrkTrkTrk` CMSSW configuration on locally stored ROOT files. It scans `root_files/`, allows the user to select a range of input files (or processes all of them when `SKIP_PROMPT=1`), and for each file calls `cmsRun` with `poet_cfg_jpsitrktrktrk.py`, producing skimmed outputs in `output_files_jpsitrktrktrk/`  with a `_jpsitrktrktrk.root` suffix and per-file log files. The script tracks the processing time per file, controls overwriting via the `OVERWRITE` flag, and prints a final summary of successful, failed, and skipped jobs.
+
+- `batch_scripts/03_run_jpsitrktrktrk_xrootd_remote.sh`  
+Online batch runner for the `JPsiTrkTrkTrk` CMSSW configuration using remote AOD files accessed via XRootD. It reads XRootD URLs from `muonia_links/*_file_index.txt`, lets the user select an index file and a line range (or uses the full range when `SKIP_PROMPT=1`), and for each URL calls `cmsRun` with `poet_cfg_jpsitrktrktrk.py`, writing the skimmed outputs to `output_files_jpsitrktrktrk/` with a `_jpsitrktrktrk.root` suffix and per-job logs in `output_files_jpsitrktrktrk/logs/`. The script checks output size, controls overwriting via `OVERWRITE`, and prints a final OK/FAIL/SKIP summary.
