@@ -14,3 +14,7 @@ Online batch runner for the `JPsiTrkTrkTrk` CMSSW configuration using remote AOD
 
 - `cmssw_cfg/cmssw_cfg_jpsitrktrktrk.py`  
 CMSSW configuration used to run the `JPsiTrkTrkTrk` EDAnalyzer on the CMS Run 2011A MuOnia AOD sample. It handles command-line input/output files, selects the appropriate GlobalTag for data or MC, applies a good-lumi JSON when available, defines the J/ψ HLT pre-filter, configures the ROOT output via `TFileService`, clones and configures the `JPsiTrkTrkTrk` analyser, prints the primary selection parameters, and defines the processing `Path`.
+
+- `cmssw_cfg/JPsiTrkTrkTrk_cfi.py`
+Default configuration of the `JPsiTrkTrkTrk` EDAnalyzer. It defines the input collections (muons, tracks, primary vertices and HLT results), the list of J/ψ trigger paths, and the complete set of preselection and final selection cuts used in the thesis analysis. The module implements the six-step selection strategy for the B⁺ → J/ψ φ K⁺ candidates (J/ψ dimuon mass window, kaon pT/η/hits, φ mass window, vertex probabilities and Lxy significance). This cfi is cloned and slightly customised in `cmssw_cfg_jpsitrktrktrk.py`.
+
