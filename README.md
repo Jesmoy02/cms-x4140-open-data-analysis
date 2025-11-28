@@ -21,4 +21,7 @@ Default configuration of the `JPsiTrkTrkTrk` EDAnalyzer. It defines the input co
 - `batch_scripts/04_merge_jpsitrktrktrk_outputs.sh`  
 Single-pass merger for all `*_jpsitrktrktrk.root` output files. It scans `output_files_jpsitrktrktrk/` for per-file JPsiTrkTrkTrk ROOT outputs (excluding any file that already contains `merged` in its name), writes a manifest with the full input list in `output_files_jpsitrktrktrk/merged/`, and runs a single `hadd -f` (ROOT 5.32, CMSSW_5_3_32 environment) to produce the final merged file `muonia_all_jpsitrktrktrk_merged.root`. A short preview of the inputs and a size check of the merged output are printed.
 
+### ROOT outputs
+- `root_outputs/muonia_all_jpsitrktrktrk_merged.root`
+Final merged JPsiTrkTrkTrk ntuple used for the analysis plots and fits in the thesis (see the thesis for the detailed list of branches and selection criteria).
 
