@@ -28,10 +28,10 @@ Default configuration of the `JPsiTrkTrkTrk` EDAnalyzer. It defines the input co
 Final merged JPsiTrkTrkTrk ntuple used for the analysis plots and fits in the thesis (see the thesis for the detailed list of branches and selection criteria).
 
 ### ROOT macros (fits)
-- `root_macros/fits/fit_Bplus_mass_dm_roofit.C`  
+- `root_macros/fit_Bplus_mass_dm_roofit.C`  
 Unbinned (non-extended) RooFit of the B⁺ candidate mass (`cand_mass_fit`) using the final merged JPsiTrkTrkTrk ntuple (`muonia_all_jpsitrktrktrk_merged.root`). The macro reconstructs the J/ψφK⁺ system from the stored kinematics, applies the Δm window (`m(μμKK) − m(μμ)` in [1.008, 1.568] GeV) and an explicit B-mass window ([5.15, 5.45] GeV), and then fits the resulting `cand_mass_fit` distribution with a Gaussian signal plus a 2nd-order Chebyshev background. Two scenarios are produced: (i) floating mean and sigma, and (ii) mean fixed to the PDG B⁺ mass and sigma floating. The macro saves PNG/PDF plots and prints a summary of the fitted signal fraction, estimated signal yield, mean, and width.
 
-- `fit_dm_twoRelBW_ps.C`  
+- `root_macros/fit_dm_twoRelBW_ps.C`  
 RooFit model for the Δm spectrum, defined as \(m(\mu^+\mu^-K^+K^-) - m(\mu^+\mu^-)\), using the merged JPsiTrkTrkTrk ntuple. It reconstructs \(J/\psi\phi\) candidates, builds Δm in the window [1.008, 1.568] GeV, optionally applies an efficiency weight from `efficiency_vs_dm.root`, and performs an extended fit with two S-wave relativistic Breit–Wigner signals (mass-dependent widths, convolved with a common Gaussian resolution) plus a three-body phase-space background. It produces the plot `dm_twoRelBW_ps {png, pdf}` and stores the rebinned histogram in `filtered_dm.root`.
 
 
