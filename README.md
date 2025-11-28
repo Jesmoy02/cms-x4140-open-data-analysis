@@ -27,6 +27,12 @@ Default configuration of the `JPsiTrkTrkTrk` EDAnalyzer. It defines the input co
 - `root_outputs/muonia_all_jpsitrktrktrk_merged.root`
 Final merged JPsiTrkTrkTrk ntuple used for the analysis plots and fits in the thesis (see the thesis for the detailed list of branches and selection criteria).
 
+### Luminosity
+Scripts used to derive the effective integrated luminosity associated with the merged ntuple `muonia_all_jpsitrktrktrk_merged.root`. The resulting luminosity value is the one quoted in the final B⁺ mass and Δm plots.
+
+- `luminosity/dumpRunLumiFromTree.C`
+ROOT macro that scans the final JPsiTrkTrkTrk TTree in `muonia_all_jpsitrktrktrk_merged.root` and extracts all unique `(run, lumi)` pairs that contribute to the selected candidates. It writes them to a plain-text file (by default `runls_muonia.txt`), one `run lumi` pair per line, sorted. This file is then used as input to the subsequent scripts (JSON / `brilcalc` / CSV workflow) to compute the effective integrated luminosity used in the thesis.
+
 ### ROOT macros (fits)
 - `root_macros/fit_Bplus_mass_dm_roofit.C`  
 Unbinned (non-extended) RooFit of the B⁺ candidate mass (`cand_mass_fit`) using the final merged JPsiTrkTrkTrk ntuple (`muonia_all_jpsitrktrktrk_merged.root`). The macro reconstructs the J/ψφK⁺ system from the stored kinematics, applies the Δm window (`m(μμKK) − m(μμ)` in [1.008, 1.568] GeV) and an explicit B-mass window ([5.15, 5.45] GeV), and then fits the resulting `cand_mass_fit` distribution with a Gaussian signal plus a 2nd-order Chebyshev background. Two scenarios are produced: (i) floating mean and sigma, and (ii) mean fixed to the PDG B⁺ mass and sigma floating. The macro saves PNG/PDF plots and prints a summary of the fitted signal fraction, estimated signal yield, mean, and width.
