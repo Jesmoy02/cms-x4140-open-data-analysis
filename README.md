@@ -80,7 +80,7 @@ The underlying dataset is the CMS Run 2011A MuOnia primary dataset in AOD format
 This directory contains the CMSSW configuration files used to run the custom `JPsiTrkTrkTrk` EDAnalyzer on the CMS Run 2011A MuOnia AOD sample.
 
 - `cmssw_cfg/cmssw_cfg_jpsitrktrktrk.py`  
-  CMSSW configuration used to run the `JPsiTrkTrkTrk` EDAnalyzer on the CMS Run 2011A MuOnia AOD sample. It handles command-line input and output files, selects the appropriate GlobalTag for data or MC, applies a good-lumi JSON when available, defines the J/ψ HLT pre-filter, configures the ROOT output via `TFileService`, clones and configures the `JPsiTrkTrkTrk` analyzer, prints the primary selection parameters, and defines the processing `Path`.
+  CMSSW configuration used to run the `JPsiTrkTrkTrk` EDAnalyzer on the CMS Run 2011A MuOnia AOD sample. It handles command-line input and output files, selects the appropriate GlobalTag for data or MC, applies a good-lumi JSON when available, defines the J/ψ HLT pre-filter, configures the ROOT output via `TFileService`, clones and configures the `JPsiTrkTrkTrk` analyser, prints the primary selection parameters, and defines the processing `Path`.
 
 - `cmssw_cfg/JPsiTrkTrkTrk_cfi.py`  
   Default configuration of the `JPsiTrkTrkTrk` EDAnalyzer. It defines the input collections (muons, tracks, primary vertices and HLT results), the list of J/ψ trigger paths, and the complete set of preselection and final selection cuts used in the thesis analysis. The module implements the six-step selection strategy for the B⁺ → J/ψ φ K⁺ candidates (J/ψ dimuon mass window, kaon pT/η/hits, φ mass window, vertex probabilities and Lxy significance). This `cfi` is cloned and slightly customised in `cmssw_cfg_jpsitrktrktrk.py`.
@@ -136,7 +136,7 @@ All raw luminosity tables and `brilcalc` outputs used in this workflow are store
   Plain-text summary produced with `brilcalc lumi` for the MuOnia Run2011A selection, using the historical 2011 Open Data normtag (`tag19v3`) and the JSON file `runls_muonia.json` as input. The file contains an ASCII table with one row per `run:fill`, listing the number of lumisections (`nls`), the number of CMS lumisections (`ncms`), and the delivered/recorded integrated luminosity in `/pb`. It is primarily kept as a human-readable reference, complementing the machine-readable CSV file `muonia_lumi_brilcalc_tag19v3_summary.csv`.
 
 - `luminosity/muonia_lumi/muonia_lumi_brilcalc_tag24v2_summary.txt`  
-  Same `brilcalc lumi` plain-text summary as above, but computed with the more recent luminosity normtag (`tag24v2`). It provides a per-run comparison of delivered and recorded luminosities in `/pb` for the same `(run, ls)` coverage and is used in the thesis to quote the effective luminosity corresponding to the updated calibration.
+  Same `brilcalc lumi` plain-text summary as above, but computed with the more recent luminosity normtag (`tag24v2`). It provides a per-run comparison of delivered and recorded luminosities in `/pb` for the same `(run, ls)` coverage. It is used in the thesis to quote the effective luminosity corresponding to the updated calibration.
 
 - `luminosity/muonia_lumi/runls_muonia.txt`  
   Plain-text list of all `(run, lumi)` pairs that contribute to the selected JPsiTrkTrkTrk candidates in `muonia_all_jpsitrktrktrk_merged.root`. It is produced by the ROOT macro `dumpRunLumiFromTree.C` and contains one `run lumi` pair per line (no weights, no duplication), already sorted. This file serves as the starting point for the effective-luminosity workflow.
