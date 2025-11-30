@@ -1,25 +1,20 @@
 # cms-x4140-open-data-analysis
 Search for the χc1(4140) in B⁺→J/ψφK⁺ decays using CMS Run 2011A MuOnia Open Data.
-
 This repository contains the analysis workflow developed to study CMS Run 2011A MuOnia open data in a search for the χc₁(4140) candidate in B⁺→J/ψφK⁺ decays. It comprises the main steps of the analysis, including event selection, reconstruction of intermediate states, and exploration of the B⁺ mass spectrum and the J/ψφ invariant mass distribution.
 
 ### Batch scripts
 - `batch_scripts/01_download_muonia2011A_AOD_rootfiles.sh`  
 Interactive script to download subsets of the CMS Run 2011A MuOnia AOD sample via XRootD.  It reads file-index lists from `muonia_links/`, allows the user to select which list, and which line range to process, downloads the corresponding ROOT files into `root_files/` with a consistent naming scheme (`muonia_<slice>_<index>.root`), and records a timestamped log in `root_files/logs_downloads/` summarising successful, failed, and skipped downloads.
-
 - `batch_scripts/02_run_jpsitrktrktrk_local_files.sh`  
 Batch runner for the `JPsiTrkTrkTrk` CMSSW configuration on locally stored ROOT files. It scans `root_files/`, allows the user to select a range of input files (or processes all of them when `SKIP_PROMPT=1`), and for each file calls `cmsRun` with `poet_cfg_jpsitrktrktrk.py`, producing skimmed outputs in `output_files_jpsitrktrktrk/`  with a `_jpsitrktrktrk.root` suffix and per-file log files. The script tracks the processing time per file, controls overwriting via the `OVERWRITE` flag, and prints a final summary of successful, failed, and skipped jobs.
-
 - `batch_scripts/03_run_jpsitrktrktrk_xrootd_remote.sh`  
 Online batch runner for the `JPsiTrkTrkTrk` CMSSW configuration using remote AOD files accessed via XRootD. It reads XRootD URLs from `muonia_links/*_file_index.txt`, lets the user select an index file and a line range (or uses the full range when `SKIP_PROMPT=1`), and for each URL calls `cmsRun` with `poet_cfg_jpsitrktrktrk.py`, writing the skimmed outputs to `output_files_jpsitrktrktrk/` with a `_jpsitrktrktrk.root` suffix and per-job logs in `output_files_jpsitrktrktrk/logs/`. The script checks output size, controls overwriting via `OVERWRITE`, and prints a final OK/FAIL/SKIP summary.
-
 - `batch_scripts/04_merge_jpsitrktrktrk_outputs.sh`  
 Single-pass merger for all `*_jpsitrktrktrk.root` output files. It scans `output_files_jpsitrktrktrk/` for per-file JPsiTrkTrkTrk ROOT outputs (excluding any file that already contains `merged` in its name), writes a manifest with the full input list in `output_files_jpsitrktrktrk/merged/`, and runs a single `hadd -f` (ROOT 5.32, CMSSW_5_3_32 environment) to produce the final merged file `muonia_all_jpsitrktrktrk_merged.root`. A short preview of the inputs and a size check of the merged output are printed.
 
 ### CMSSW configuration
 - `cmssw_cfg/cmssw_cfg_jpsitrktrktrk.py`  
 CMSSW configuration used to run the `JPsiTrkTrkTrk` EDAnalyzer on the CMS Run 2011A MuOnia AOD sample. It handles command-line input/output files, selects the appropriate GlobalTag for data or MC, applies a good-lumi JSON when available, defines the J/ψ HLT pre-filter, configures the ROOT output via `TFileService`, clones and configures the `JPsiTrkTrkTrk` analyser, prints the primary selection parameters, and defines the processing `Path`.
-
 - `cmssw_cfg/JPsiTrkTrkTrk_cfi.py`
 Default configuration of the `JPsiTrkTrkTrk` EDAnalyzer. It defines the input collections (muons, tracks, primary vertices and HLT results), the list of J/ψ trigger paths, and the complete set of preselection and final selection cuts used in the thesis analysis. The module implements the six-step selection strategy for the B⁺ → J/ψ φ K⁺ candidates (J/ψ dimuon mass window, kaon pT/η/hits, φ mass window, vertex probabilities and Lxy significance). This cfi is cloned and slightly customised in `cmssw_cfg_jpsitrktrktrk.py`.
 
@@ -29,17 +24,29 @@ Final merged JPsiTrkTrkTrk ntuple used for the analysis plots and fits in the th
 
 ### Luminosity
 Scripts used to derive the effective integrated luminosity associated with the merged ntuple `muonia_all_jpsitrktrktrk_merged.root`. The resulting luminosity value is the one quoted in the final B⁺ mass and Δm plots.
-
 - `luminosity/dumpRunLumiFromTree.C`
 ROOT macro that scans the final JPsiTrkTrkTrk TTree in `muonia_all_jpsitrktrktrk_merged.root` and extracts all unique `(run, lumi)` pairs that contribute to the selected candidates. It writes them to a plain-text file (by default `runls_muonia.txt`), one `run lumi` pair per line, sorted. This file is then used as input to the subsequent scripts (JSON / `brilcalc` / CSV workflow) to compute the effective integrated luminosity used in the thesis.
-
+- `luminosity/runls_to_json.py`  
+Python helper that converts the flat list of `(run, ls)` pairs from `runls_muonia.txt` into a JSON file in the format required by `brilcalc` (per-run lists of contiguous LS ranges). The default output is `runls_muonia.json`, which is used by both the CSV-based and the `brilcalc`-based luminosity determinations.
 - `luminosity/compute_effective_lumi_from_csv.py`
 Python script that computes the effective recorded integrated luminosity for the analysed muonia sample. It reads the `(run, ls)` coverage from `runls_muonia.json`, matches each pair to the 2011 `lumibyls` CSV files (`2011lumibyls_pxl.csv` and `2011lumibyls_hfoc.csv`), and sums the recorded luminosity in `/ub` using a pxl > hfoc priority. The result is printed both in `/ub` and `/pb`.
+All raw luminosity tables and `brilcalc` outputs used in this workflow are stored under `luminosity/muonia_lumi/`:
+- `luminosity/muonia_lumi_brilcalc_tag19v3_lumibyls.csv`  
+Per-lumisection luminosity output from `brilcalc` for the MuOnia Run2011A selection, using the historical 2011 Open Data luminosity tag (e.g. `--normtag tag19v3 ... --byls`). Contains `run:fill`, LS ranges and recorded luminosity in `/ub`, restricted to the `(run, ls)` pairs listed in `runls_muonia.json`.
+- `luminosity/muonia_lumi_brilcalc_tag24v2_lumibyls.csv`  
+Same as above, but produced with a more recent luminosity tag (e.g. `--normtag tag24v2 ... --byls`) and used to cross-check the stability of the effective integrated luminosity against the 19v3 configuration, LS by LS.
+- `luminosity/muonia_lumi/muonia_lumi_brilcalc_tag19v3_summary.csv`  
+CSV summary produced with `brilcalc lumi` for the MuOnia Run2011A selection, using the historical 2011 Open Data normtag (`tag19v3`) and the JSON file `runls_muonia.json` as input. Each row corresponds to a single `run:fill` and includes the total number of lumisections (`nls`), the number of CMS lumisections (`ncms`), and the delivered/recorded integrated luminosity in `/pb`. This file is primarily a machine-readable counterpart to the plain-text `muonia_lumi_brilcalc_tag19v3.txt` summary.
+- `luminosity/muonia_lumi/muonia_lumi_brilcalc_tag24v2_summary.csv`
+Same `brilcalc lumi` CSV summary as above, but obtained with the more recent luminosity normtag (`tag24v2`). It provides a per-run comparison of delivered and recorded luminosities in `/pb` between the legacy 19v3 and the updated 24v2 calibration, for precisely the same `(run, ls)` coverage used in the analysis.
+- `luminosity/muonia_lumi/muonia_lumi_brilcalc_tag19v3_summary.txt`  
+Plain-text summary produced with `brilcalc lumi` for the MuOnia Run2011A selection, using the historical 2011 Open Data normtag (`tag19v3`) and the JSON file `runls_muonia.json` as input. The file contains an ASCII table with one row per `run:fill`, listing the number of lumisections (`nls`), the number of CMS lumisections (`ncms`), and the delivered/recorded integrated luminosity in `/pb`. It is mainly kept as a human-readable reference, complementary to the machine-friendly CSV file `muonia_lumi_brilcalc_tag19v3_summary.csv`.
+- `luminosity/muonia_lumi/muonia_lumi_brilcalc_tag24v2_summary.txt`  
+Same `brilcalc lumi` plain-text summary as above, but computed with the more recent luminosity normtag (`tag24v2`). It provides a per-run comparison of delivered and recorded luminosities in `/pb` for the same `(run, ls)` coverage. It is used in the thesis to quote the effective luminosity corresponding to the updated calibration.
 
 ### ROOT macros (fits)
 - `root_macros/fit_Bplus_mass_dm_roofit.C`  
 Unbinned (non-extended) RooFit of the B⁺ candidate mass (`cand_mass_fit`) using the final merged JPsiTrkTrkTrk ntuple (`muonia_all_jpsitrktrktrk_merged.root`). The macro reconstructs the J/ψφK⁺ system from the stored kinematics, applies the Δm window (`m(μμKK) − m(μμ)` in [1.008, 1.568] GeV) and an explicit B-mass window ([5.15, 5.45] GeV), and then fits the resulting `cand_mass_fit` distribution with a Gaussian signal plus a 2nd-order Chebyshev background. Two scenarios are produced: (i) floating mean and sigma, and (ii) mean fixed to the PDG B⁺ mass and sigma floating. The macro saves PNG/PDF plots and prints a summary of the fitted signal fraction, estimated signal yield, mean, and width.
-
 - `root_macros/fit_dm_twoRelBW_ps.C`  
 RooFit model for the Δm spectrum, defined as \(m(\mu^+\mu^-K^+K^-) - m(\mu^+\mu^-)\), using the merged JPsiTrkTrkTrk ntuple. It reconstructs \(J/\psi\phi\) candidates, builds Δm in the window [1.008, 1.568] GeV, optionally applies an efficiency weight from `efficiency_vs_dm.root`, and performs an extended fit with two S-wave relativistic Breit–Wigner signals (mass-dependent widths, convolved with a common Gaussian resolution) plus a three-body phase-space background. It produces the plot `dm_twoRelBW_ps {png, pdf}` and stores the rebinned histogram in `filtered_dm.root`.
 
