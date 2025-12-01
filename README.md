@@ -121,22 +121,22 @@ This directory contains the scripts and auxiliary tables used to derive the effe
 All raw luminosity tables and `brilcalc` outputs used in this workflow are stored under `luminosity/muonia_lumi/`:
 
 - `luminosity/muonia_lumi/muonia_lumi_brilcalc_tag19v3_lumibyls.csv`  
-  Per-lumisection luminosity output from `brilcalc` for the MuOnia Run2011A selection, using the historical 2011 Open Data luminosity tag (e.g. `--normtag tag19v3 ... --byls`). Contains `run:fill`, LS ranges and recorded luminosity in `/ub`, restricted to the `(run, ls)` pairs listed in `runls_muonia.json`.
+  Per-lumisection luminosity output from `brilcalc` for the MuOnia Run2011A selection, using the historical 2011 Open Data **data tag** (`--datatag 19v3 ... --byls`). The file contains `run:fill`, LS ranges and delivered/recorded luminosity in `/ub`, restricted to the `(run, ls)` pairs listed in `runls_muonia.json`.
 
 - `luminosity/muonia_lumi/muonia_lumi_brilcalc_tag24v2_lumibyls.csv`  
-  Same as above, but produced with a more recent luminosity tag (e.g. `--normtag tag24v2 ... --byls`) and used to cross-check the stability of the effective integrated luminosity against the 19v3 configuration, LS by LS.
+  Same as above, but produced with the more recent luminosity **data tag** (`--datatag 24v2 ... --byls`) and used to cross-check the stability of the effective integrated luminosity against the 19v3 configuration, LS by LS.
 
 - `luminosity/muonia_lumi/muonia_lumi_brilcalc_tag19v3_summary.csv`  
-  CSV summary produced with `brilcalc lumi` for the MuOnia Run2011A selection, using the historical 2011 Open Data normtag (`tag19v3`) and the JSON file `runls_muonia.json` as input. Each row corresponds to a single `run:fill` and includes the total number of lumisections (`nls`), the number of CMS lumisections (`ncms`), and the delivered/recorded integrated luminosity in `/pb`. This file is primarily a machine-readable counterpart to the plain-text `muonia_lumi_brilcalc_tag19v3_summary.txt` summary.
+  CSV summary produced with `brilcalc lumi` for the MuOnia Run2011A selection, using the historical 2011 Open Data **data tag** (`--datatag 19v3`) and the JSON file `runls_muonia.json` as input. Each row corresponds to a single `run:fill` and includes the total number of lumisections (`nls`), the number of CMS lumisections (`ncms`), and the delivered/recorded integrated luminosity in `/pb`. This file is primarily a machine-readable counterpart to the plain-text summary `muonia_lumi_brilcalc_tag19v3_summary.txt`.
 
 - `luminosity/muonia_lumi/muonia_lumi_brilcalc_tag24v2_summary.csv`  
-  Same `brilcalc lumi` CSV summary as above, but obtained with the more recent luminosity normtag (`tag24v2`). It provides a per-run comparison of delivered and recorded luminosities in `/pb` between the legacy 19v3 and the updated 24v2 calibration, for precisely the same `(run, ls)` coverage used in the analysis.
+  Same `brilcalc lumi` CSV summary as above, but obtained with the more recent luminosity **data tag** (`--datatag 24v2`). It provides a per-run comparison of delivered and recorded luminosities in `/pb` between the legacy 19v3 and the updated 24v2 calibration, for precisely the same `(run, ls)` coverage used in the analysis.
 
 - `luminosity/muonia_lumi/muonia_lumi_brilcalc_tag19v3_summary.txt`  
-  Plain-text summary produced with `brilcalc lumi` for the MuOnia Run2011A selection, using the historical 2011 Open Data normtag (`tag19v3`) and the JSON file `runls_muonia.json` as input. The file contains an ASCII table with one row per `run:fill`, listing the number of lumisections (`nls`), the number of CMS lumisections (`ncms`), and the delivered/recorded integrated luminosity in `/pb`. It is primarily kept as a human-readable reference, complementing the machine-readable CSV file `muonia_lumi_brilcalc_tag19v3_summary.csv`.
+  Plain-text summary produced with `brilcalc lumi` for the MuOnia Run2011A selection, using the historical 2011 Open Data **data tag** (`--datatag 19v3`) and the JSON file `runls_muonia.json` as input. The file contains an ASCII table with one row per `run:fill`, listing the number of lumisections (`nls`), the number of CMS lumisections (`ncms`), and the delivered/recorded integrated luminosity in `/pb`. It is primarily kept as a human-readable reference, complementing the machine-readable CSV file `muonia_lumi_brilcalc_tag19v3_summary.csv`.
 
 - `luminosity/muonia_lumi/muonia_lumi_brilcalc_tag24v2_summary.txt`  
-  Same `brilcalc lumi` plain-text summary as above, but computed with the more recent luminosity normtag (`tag24v2`). It provides a per-run comparison of delivered and recorded luminosities in `/pb` for the same `(run, ls)` coverage. It is used in the thesis to quote the effective luminosity corresponding to the updated calibration.
+  Same `brilcalc lumi` plain-text summary as above, but computed with the more recent luminosity **data tag** (`--datatag 24v2`). It provides a per-run comparison of delivered and recorded luminosities in `/pb` for the same `(run, ls)` coverage. It is used in the thesis to quote the effective luminosity corresponding to the updated calibration.
 
 - `luminosity/muonia_lumi/runls_muonia.txt`  
   Plain-text list of all `(run, lumi)` pairs that contribute to the selected JPsiTrkTrkTrk candidates in `muonia_all_jpsitrktrktrk_merged.root`. It is produced by the ROOT macro `dumpRunLumiFromTree.C` and contains one `run lumi` pair per line (no weights, no duplication), already sorted. This file serves as the starting point for the effective-luminosity workflow.
