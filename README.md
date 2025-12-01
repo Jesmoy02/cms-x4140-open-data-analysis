@@ -71,7 +71,7 @@ These index files are used by the batch scripts in `batch_scripts/` to either:
 - download subsets of the MuOnia AOD dataset locally into `root_files/`, or  
 - run the `JPsiTrkTrkTrk` CMSSW configuration directly over remote inputs via XRootD.
 
-The underlying dataset is the CMS Run 2011A MuOnia primary dataset in AOD format, as released through the CERN Open Data portal.
+Further information is available at: https://opendata.cern.ch/record/27
 
 ---
 
@@ -175,5 +175,3 @@ Due to GitHub size constraints, the final merged JPsiTrkTrkTrk ntuple used for t
 - Location: [Download link (Google Drive)](https://drive.google.com/file/d/17Tk8BTXR8BlpdjVnIjPG_XVqiS_Au43Y/view?usp=drive_link)
 
 This file is obtained by running `batch_scripts/04_merge_jpsitrktrktrk_outputs.sh` over all `*_jpsitrktrktrk.root` files produced in `output_files_jpsitrktrktrk/`. The detailed list of branches and the selection criteria applied in the analysis are described in the thesis.
-
-Further information is available at: https://opendata.cern.ch/record/27
